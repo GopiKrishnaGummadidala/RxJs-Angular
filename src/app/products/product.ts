@@ -1,11 +1,11 @@
 export interface Product {
-  id: number;
-  productName: string;
-  productCode?: string;
-  description?: string;
-  price?: number;
-  categoryId?: number;
-  quantityInStock?: number;
-  searchKey?: string[];
-  supplierIds?: number[];
+  Id: number;
+  ProductName: string;
+  ProductCode?: string;
+  Description?: string;
+  Price?: number;
+  CategoryId?: number;
+  QuantityInStock?: number;
+  SearchKey?: string[];
+  SupplierIds?: number[];
 }

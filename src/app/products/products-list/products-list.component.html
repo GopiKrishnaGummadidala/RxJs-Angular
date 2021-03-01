@@ -1,1 +1,49 @@
-<p>products-list works!</p>
+<div class="card">
+  <div class="card-header">
+    {{ pageTitle }}
+  </div>
+
+  <div class="card-body">
+    <div class="container">
+      <div class="row justify-content-between">
+        <div class="col-3">
+          <select class="form-control">
+            <option value="0">- Display All -</option>
+          </select>
+        </div>
+        <div class="col-2">
+          <button type="button" class="btn btn-outline-secondary">
+            Add Product
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="table-responsive">
+      <table class="table mt-10" *ngIf="products$ | async as products">
+        <thead>
+          <tr>
+            <th>Product</th>
+            <th>Code</th>
+            <th>Category</th>
+            <th>Price</th>
+            <th>In Stock</th>
+          </tr>
+        </thead>
+        <tbody *ngFor="let product of products">
+          <tr>
+            <td>{{ product.ProductName }}</td>
+            <td>{{ product.ProductCode }}</td>
+            <td>{{ product.CategoryId }}</td>
+            <td>{{ product.Price | currency: "USD":"symbol":"1.2-2" }}</td>
+            <td>{{ product.QuantityInStock }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="alert alert-danger" *ngIf="errMessage">
+  {{ errMessage }}
+</div>
