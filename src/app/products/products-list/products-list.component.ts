@@ -24,5 +24,13 @@ export class ProductsListComponent {
       return EMPTY;
     })
   );
+
+  productsWithCategorys$ = this.productService.productsWithCategorys$.pipe(
+    catchError((err) => {
+      this.errMessage = err;
+      return EMPTY;
+    })
+  );
+
   constructor(private productService: ProductService) {}
 }

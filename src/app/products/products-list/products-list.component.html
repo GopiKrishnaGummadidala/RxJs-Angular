@@ -20,7 +20,10 @@
     </div>
 
     <div class="table-responsive">
-      <table class="table mt-10" *ngIf="products$ | async as products">
+      <table
+        class="table mt-10"
+        *ngIf="productsWithCategorys$ | async as products"
+      >
         <thead>
           <tr>
             <th>Product</th>
@@ -34,7 +37,7 @@
           <tr>
             <td>{{ product.ProductName }}</td>
             <td>{{ product.ProductCode }}</td>
-            <td>{{ product.CategoryId }}</td>
+            <td>{{ product.Category }}</td>
             <td>{{ product.Price | currency: "USD":"symbol":"1.2-2" }}</td>
             <td>{{ product.QuantityInStock }}</td>
           </tr>
