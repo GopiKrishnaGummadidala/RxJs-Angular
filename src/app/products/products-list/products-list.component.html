@@ -7,8 +7,17 @@
     <div class="container">
       <div class="row justify-content-between">
         <div class="col-3">
-          <select class="form-control">
+          <select
+            class="form-control"
+            (change)="onSelected($event.target.value)"
+          >
             <option value="0">- Display All -</option>
+            <option
+              *ngFor="let category of categorys$ | async"
+              [value]="category.Id"
+            >
+              {{ category.Name }}
+            </option>
           </select>
         </div>
         <div class="col-2">
@@ -22,7 +31,7 @@
     <div class="table-responsive">
       <table
         class="table mt-10"
-        *ngIf="productsWithCategorys$ | async as products"
+        *ngIf="productsSimpleFilter$ | async as products"
       >
         <thead>
           <tr>
