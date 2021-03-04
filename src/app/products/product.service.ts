@@ -10,7 +10,7 @@ import { ProductCategory } from "./product-category";
   providedIn: "root",
 })
 export class ProductService {
-  private productsUrl = "http://localhost:62799/api//getProducts";
+  private productsUrl = "http://localhost:62799/api/Product/getProducts";
 
   private selectedProductSubject = new BehaviorSubject<number>(0);
   selectedProductAction$ = this.selectedProductSubject.asObservable();
@@ -70,7 +70,7 @@ export class ProductService {
     } else {
       // The backend returned an unsuccessful response code.
       // The response body may contain clues as to what went wrong,
-      errorMessage = `Backend returned code ${err.status}: ${err.error}`;
+      errorMessage = `Backend returned code ${err.status}: ${err.body.error}`;
     }
     console.error(err);
     return throwError(errorMessage);
