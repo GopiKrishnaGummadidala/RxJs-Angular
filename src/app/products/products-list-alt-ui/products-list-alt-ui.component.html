@@ -1,0 +1,26 @@
+<div class="card">
+  <div class="card-header">
+    {{ pageTitle }}
+  </div>
+
+  <div class="card-body" *ngIf="productsWithCategorys$ | async as products">
+    <div class="list-group">
+      <button
+        type="button"
+        class="list-group-item"
+        *ngFor="let product of products"
+        [ngClass]="{ active: product?.Id === (selectedProduct$ | async)?.Id }"
+        (click)="onSelected(product.Id)"
+      >
+        {{ product.ProductName }} ({{ product.Category }})
+      </button>
+    </div>
+  </div>
+</div>
+
+<div
+  class="alert alert-danger"
+  *ngIf="errMessageAction$ | async as errorMessage"
+>
+  {{ errorMessage }}
+</div>
