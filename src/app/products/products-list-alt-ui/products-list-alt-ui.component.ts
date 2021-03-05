@@ -13,7 +13,7 @@ export class ProductsListAltUIComponent implements OnInit {
   pageTitle = "Product List";
   errMessageAction$ = new Subject<string>();
   selectedProduct$ = this.productService.selectedProduct$;
-  productsWithCategorys$ = this.productService.productsWithAdd$.pipe(
+  productsWithCategorys$ = this.productService.productsWithCategorys$.pipe(
     catchError((err) => {
       this.errMessageAction$.next(err);
       return EMPTY;

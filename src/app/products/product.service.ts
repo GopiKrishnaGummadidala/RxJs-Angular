@@ -9,7 +9,7 @@ import {
   Subject,
   throwError,
 } from "rxjs";
-import { catchError, map, scan, tap } from "rxjs/operators";
+import { catchError, map, scan, shareReplay, tap } from "rxjs/operators";
 import { Product } from "./product";
 import { ProductCategory } from "./product-category";
 
@@ -45,6 +45,7 @@ export class ProductService {
           } as Product)
       )
     ),
+    shareReplay(1),
     tap((data) =>
       console.log("Products with Categorys: ", JSON.stringify(data))
     ),
