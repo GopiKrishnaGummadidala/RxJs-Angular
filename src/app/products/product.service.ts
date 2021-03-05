@@ -1,8 +1,15 @@
 import { ProductCategoryService } from "./product-category.service";
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
-import { BehaviorSubject, combineLatest, Observable, throwError } from "rxjs";
-import { catchError, map, tap } from "rxjs/operators";
+import {
+  BehaviorSubject,
+  combineLatest,
+  merge,
+  Observable,
+  Subject,
+  throwError,
+} from "rxjs";
+import { catchError, map, scan, tap } from "rxjs/operators";
 import { Product } from "./product";
 import { ProductCategory } from "./product-category";
 
@@ -10,10 +17,13 @@ import { ProductCategory } from "./product-category";
   providedIn: "root",
 })
 export class ProductService {
-  private productsUrl = "http://localhost:62799/api/Product/getProducts";
+  private productsUrl = "http://localhost:62799/api/Products/getProducts";
 
   private selectedProductSubject = new BehaviorSubject<number>(0);
   selectedProductAction$ = this.selectedProductSubject.asObservable();
+
+  private productAddSubject = new Subject<Product>();
+  private productAddAction$ = this.productAddSubject.asObservable();
 
   products$ = this.http.get<Product[]>(this.productsUrl).pipe(
     tap((data) => console.log("Products: ", JSON.stringify(data))),
@@ -51,6 +61,11 @@ export class ProductService {
     tap((data) => console.log("Selected Product" + JSON.stringify(data)))
   );
 
+  productsWithAdd$ = merge(
+    this.productsWithCategorys$,
+    this.productAddAction$
+  ).pipe(scan((acc: Product[], value: Product) => [...acc, value]));
+
   constructor(
     private http: HttpClient,
     private productCategoryService: ProductCategoryService
@@ -58,6 +73,23 @@ export class ProductService {
 
   selectedProductChanged(prodId: number): void {
     this.selectedProductSubject.next(prodId);
+  }
+
+  addProduct(product: Product): void {
+    this.productAddSubject.next(this.fakeProduct());
+  }
+
+  private fakeProduct() {
+    return {
+      Id: 42,
+      ProductName: "Another One",
+      ProductCode: "TBX-0042",
+      Description: "Our new product",
+      Price: 8.9,
+      CategoryId: 3,
+      Category: "Toolbox",
+      QuantityInStock: 30,
+    };
   }
 
   public handleError(err: any) {

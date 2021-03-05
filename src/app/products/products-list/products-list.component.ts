@@ -29,7 +29,7 @@ export class ProductsListComponent {
   private selectedCategorySubject = new BehaviorSubject<number>(0);
   public selectedCategoryAction$ = this.selectedCategorySubject.asObservable();
 
-  products$ = this.productService.products$.pipe(
+  products$ = this.productService.productsWithAdd$.pipe(
     catchError((err) => {
       this.errMessage = err;
       return EMPTY;
@@ -72,5 +72,9 @@ export class ProductsListComponent {
 
   onSelected(event): void {
     this.selectedCategorySubject.next(+event);
+  }
+
+  addProduct(): void {
+    this.productService.addProduct(null);
   }
 }
