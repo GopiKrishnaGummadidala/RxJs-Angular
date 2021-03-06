@@ -26,7 +26,10 @@
     </div>
 
     <div class="table-responsive">
-      <table class="table mb-0" *ngIf="productSuppliers">
+      <table
+        class="table mb-0"
+        *ngIf="selectedProductSuppliers$ | async as productSuppliers"
+      >
         <thead>
           <tr>
             <th>Supplier</th>
@@ -36,9 +39,9 @@
         </thead>
         <tbody>
           <tr *ngFor="let supplier of productSuppliers">
-            <td>{{ supplier.name }}</td>
-            <td>{{ supplier.cost | currency: "USD":"symbol":"1.2-2" }}</td>
-            <td>{{ supplier.minQuantity }}</td>
+            <td>{{ supplier.Name }}</td>
+            <td>{{ supplier.Cost | currency: "USD":"symbol":"1.2-2" }}</td>
+            <td>{{ supplier.MinQuantity }}</td>
           </tr>
         </tbody>
       </table>
@@ -46,6 +49,9 @@
   </div>
 </div>
 
-<div class="alert alert-danger" *ngIf="errorMessage">
+<div
+  class="alert alert-danger"
+  *ngIf="errMessageAction$ | async as errorMessage"
+>
   {{ errorMessage }}
 </div>
