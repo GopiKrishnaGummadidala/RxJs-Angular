@@ -63,6 +63,18 @@ export class ProductService {
     tap((data) => console.log("Selected Product" + JSON.stringify(data)))
   );
 
+  selectedProductSuppliers$ = combineLatest([
+    this.selectedProduct$,
+    this.supplierService.suppliers$,
+  ]).pipe(
+    map(([selectedProduct, suppliers]) => {
+      return suppliers.filter((s) =>
+        selectedProduct.SupplierIds.includes(s.Id)
+      );
+    }),
+    tap((data) => console.log("Selected Product" + JSON.stringify(data)))
+  );
+
   productsWithAdd$ = merge(
     this.productsWithCategorys$,
     this.productAddAction$

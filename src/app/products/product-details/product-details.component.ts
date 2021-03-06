@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, OnInit } from "@angular/core";
-import { EMPTY } from "rxjs";
+import { EMPTY, Subject } from "rxjs";
 import { catchError } from "rxjs/operators";
 import { ProductService } from "../product.service";
 
@@ -12,12 +12,22 @@ import { ProductService } from "../product.service";
 export class ProductDetailsComponent implements OnInit {
   pageTitle = "Product Details";
   errMessage: string;
+  private errMessageSubject = new Subject();
+  errMessageAction$ = this.errMessageSubject.asObservable();
   product$ = this.productService.selectedProduct$.pipe(
     catchError((err) => {
-      this.errMessage = err;
+      this.errMessageSubject.next(err);
       return EMPTY;
     })
   );
+
+  selectedProductSuppliers$ = this.productService.selectedProductSuppliers$.pipe(
+    catchError((err) => {
+      this.errMessageSubject.next(err);
+      return EMPTY;
+    })
+  );
+
   constructor(private productService: ProductService) {}
 
   ngOnInit() {}
