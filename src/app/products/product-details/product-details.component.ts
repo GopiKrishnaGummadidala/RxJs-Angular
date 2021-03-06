@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, OnInit } from "@angular/core";
 import { EMPTY, Subject } from "rxjs";
-import { catchError } from "rxjs/operators";
+import { catchError, tap } from "rxjs/operators";
 import { ProductService } from "../product.service";
 
 @Component({
@@ -22,6 +22,7 @@ export class ProductDetailsComponent implements OnInit {
   );
 
   selectedProductSuppliers$ = this.productService.selectedProductSuppliers$.pipe(
+    tap((data) => console.log(data)),
     catchError((err) => {
       this.errMessageSubject.next(err);
       return EMPTY;

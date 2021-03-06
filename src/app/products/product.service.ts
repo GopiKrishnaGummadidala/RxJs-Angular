@@ -4,21 +4,34 @@ import { HttpClient } from "@angular/common/http";
 import {
   BehaviorSubject,
   combineLatest,
+  from,
   merge,
   Observable,
   Subject,
   throwError,
 } from "rxjs";
-import { catchError, map, scan, shareReplay, tap } from "rxjs/operators";
+import {
+  catchError,
+  filter,
+  map,
+  mergeMap,
+  scan,
+  shareReplay,
+  switchMap,
+  tap,
+  toArray,
+} from "rxjs/operators";
 import { Product } from "./product";
 import { ProductCategory } from "./product-category";
 import { SupplierService } from "../suppliers/supplier.service";
+import { Supplier } from "../suppliers/supplier";
 
 @Injectable({
   providedIn: "root",
 })
 export class ProductService {
   private productsUrl = "http://localhost:62799/api/Products/getProducts";
+  private supplierUrl = this.supplierService.suppliersUrl;
 
   private selectedProductSubject = new BehaviorSubject<number>(0);
   selectedProductAction$ = this.selectedProductSubject.asObservable();
@@ -63,16 +76,30 @@ export class ProductService {
     tap((data) => console.log("Selected Product" + JSON.stringify(data)))
   );
 
-  selectedProductSuppliers$ = combineLatest([
-    this.selectedProduct$,
-    this.supplierService.suppliers$,
-  ]).pipe(
-    map(([selectedProduct, suppliers]) => {
-      return suppliers.filter((s) =>
-        selectedProduct.SupplierIds.includes(s.Id)
-      );
-    }),
-    tap((data) => console.log("Selected Product" + JSON.stringify(data)))
+  // selectedProductSuppliers$ = combineLatest([
+  //   this.selectedProduct$,
+  //   this.supplierService.suppliers$,
+  // ]).pipe(
+  //   map(([selectedProduct, suppliers]) => {
+  //     return suppliers.filter((s) =>
+  //       selectedProduct.SupplierIds.includes(s.Id)
+  //     );
+  //   }),
+  //   tap((data) => console.log("Selected Product" + JSON.stringify(data)))
+  // );
+
+  selectedProductSuppliers$ = this.selectedProduct$.pipe(
+    filter((selectedProduct) => Boolean(selectedProduct)),
+    switchMap((selectedProduct) =>
+      from(selectedProduct.SupplierIds).pipe(
+        mergeMap((supplierId) =>
+          this.http.get<Supplier>(`${this.supplierUrl}${supplierId}`)
+        ),
+        tap((suppliers) =>
+          console.log("product suppliers", JSON.stringify(suppliers))
+        )
+      )
+    )
   );
 
   productsWithAdd$ = merge(
