@@ -12,6 +12,7 @@ import {
 import { catchError, map, scan, shareReplay, tap } from "rxjs/operators";
 import { Product } from "./product";
 import { ProductCategory } from "./product-category";
+import { SupplierService } from "../suppliers/supplier.service";
 
 @Injectable({
   providedIn: "root",
@@ -69,7 +70,8 @@ export class ProductService {
 
   constructor(
     private http: HttpClient,
-    private productCategoryService: ProductCategoryService
+    private productCategoryService: ProductCategoryService,
+    private supplierService: SupplierService
   ) {}
 
   selectedProductChanged(prodId: number): void {
