@@ -17,7 +17,8 @@ import { Supplier } from "./supplier";
   providedIn: "root",
 })
 export class SupplierService {
-  suppliersUrl = "http://localhost:62799/api/Supplier/GetSuppliers";
+  //suppliersUrl = "http://localhost:62799/api/Supplier/GetSuppliers";
+  suppliersUrl = "http://localhost:62799/api/Values/GetSupplier?id=";
 
   suppliers$ = this.http.get<Supplier[]>(`${this.suppliersUrl}`).pipe(
     tap((data) => console.log("suppliers", JSON.stringify(data))),
